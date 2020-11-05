@@ -1,6 +1,7 @@
 // elements
 const display = document.querySelector('#display');
 const numbers = Array.from(document.getElementsByClassName('numeric'));
+const clearBtn = document.querySelector('#clear');
 
 //variables
 let zeroed = true; // when display awaits for input
@@ -10,20 +11,24 @@ let zeroed = true; // when display awaits for input
 // functions
 
 //Initializes display 
-function initializeDisplay(){
+function clearDisplay(){
     display.value = 0;
+    zeroed = true;
 }
 
 /**
  * Now buttons can be clicked, and their value displayed on the screen
  */
-function addClickabilityNumbers(){
+function addClickability(){
    for (var i = 0; i < numbers.length; i++) {
      numbers[i].addEventListener('click', element => {
         updateDisplay(element.currentTarget.value);
      });
    }
+
+   clearBtn.addEventListener('click', ()  => clearDisplay());
 }
+
 
 /**
  * displays whatever was clicked
@@ -39,5 +44,5 @@ function updateDisplay(value){
     }
 }
 // main
-initializeDisplay();
-addClickabilityNumbers();
+clearDisplay();
+addClickability();
