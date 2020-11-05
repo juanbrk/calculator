@@ -20,6 +20,7 @@ let isSum = false; // to refactor into an object of operations
 function clearDisplay(){
     display.value = 0;
     zeroed = true;
+    resetOperands();
 }
 
 /**
