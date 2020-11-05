@@ -5,6 +5,7 @@ const clearBtn = document.querySelector('#clear');
 const addBtn = document.querySelector('#add');
 const multiplyBtn = document.querySelector('#multiply');
 const computeBtn = document.querySelector('#compute');
+const subtractBtn = document.querySelector('#subtract');
 
 
 //variables
@@ -16,6 +17,7 @@ let operandB = null;
 let operations = {
     sum : false,
     multiply : false,
+    subtract: false,
 }
 // consts
 
@@ -38,10 +40,11 @@ function addClickability(){
      });
    }
    
-   clearBtn.addEventListener('click', ()  => clearDisplay());
    addBtn.addEventListener('click', ()  => sum());
    multiplyBtn.addEventListener('click', ()  => multiply());
+   subtractBtn.addEventListener('click', ()  => subtract());
    computeBtn.addEventListener('click', ()  => compute());
+   clearBtn.addEventListener('click', ()  => clearDisplay());
 
 }
 
@@ -83,10 +86,14 @@ function performOperation(operationToPerform){
 
     switch(operationToPerform){
         case 'multiply':
-            computedValue = Number(operandA) * Number(operandB);
+            computedValue = multiply(operandA, operandB);
             break;
         case 'sum':
             computedValue = sum(operandA, operandB);
+            break;
+        case 'subtract':
+            computedValue = subtract(operandA, operandB);
+            break;
     } 
 
     return computedValue;
@@ -113,6 +120,30 @@ function sum(a, b){
     return computedValue;
 }
 
+function multiply(a, b){
+    let computedValue = 0;
+    if(a == null && b == null){ 
+        setUpForOperation('multiply')
+    } else {
+        //perform operation
+        computedValue = Number(a) * Number(b);
+    }
+    return computedValue;
+}
+
+function subtract(a, b){
+    let computedValue = 0;
+    if(a == null && b == null){ 
+        setUpForOperation('subtract')
+    } else {
+        //perform operation
+        computedValue = Number(a) - Number(b);
+    }
+    return computedValue;
+
+}
+
+
 function takeInput(){
     if (!!operandA){
         operandA += Number(display.value);
@@ -121,14 +152,6 @@ function takeInput(){
         operandA = Number(display.value);
     }
     readyForInput = true;
-}
-
-function multiply(a, b){
-    if(a == null && b == null){ 
-        setUpForOperation('multiply')
-    } else {
-        //perform operation
-    }
 }
 
 /**
