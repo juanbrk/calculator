@@ -1,6 +1,7 @@
 // elements
 const display = document.querySelector('#display');
 const numbers = Array.from(document.getElementsByClassName('numeric'));
+const accionables = Array.from(document.getElementsByClassName('accionable'));
 const clearBtn = document.querySelector('#clear');
 const addBtn = document.querySelector('#add');
 const multiplyBtn = document.querySelector('#multiply');
@@ -13,6 +14,8 @@ const divideBtn = document.querySelector('#divide');
 let readyForInput = true; // when display awaits for input
 let operandA = null;
 let operandB = null;
+let operationInProcess = false;
+let ongoingOperation = '';
 
 
 let operations = {
@@ -29,39 +32,50 @@ let operations = {
 function clearDisplay(){
     display.value = 0;
     readyForInput = true;
-    resetOperands();
+    let clearOngoingOperation = true;
+    resetOperands(clearOngoingOperation);
 }
 
 /**
  * Now buttons can be clicked, and their value displayed on the screen
  */
 function addClickability(){
-   for (var i = 0; i < numbers.length; i++) {
+    for (var i = 0; i < numbers.length; i++) {
      numbers[i].addEventListener('click', element => {
         updateDisplay(element.currentTarget.value);
      });
-   }
-   
-   addBtn.addEventListener('click', ()  => sum());
-   multiplyBtn.addEventListener('click', ()  => multiply());
-   subtractBtn.addEventListener('click', ()  => subtract());
-   divideBtn.addEventListener('click', ()  => divide());
-   computeBtn.addEventListener('click', ()  => compute());
-   clearBtn.addEventListener('click', ()  => clearDisplay());
+    }
+    
+    // for (var i = 0; i < accionables.length; i++) {
+    //     accionables[i].addEventListener('click', () => beginOperation());
+    // }
+    
+    addBtn.addEventListener('click', ()  => setUpForOperation('sum'));
+    multiplyBtn.addEventListener('click', ()  => setUpForOperation('multiply'));
+    subtractBtn.addEventListener('click', ()  => setUpForOperation('subtract'));
+    divideBtn.addEventListener('click', ()  => setUpForOperation('divide'));
+    computeBtn.addEventListener('click', ()  => compute(true));
+    clearBtn.addEventListener('click', ()  => clearDisplay());
+    
+}
 
+function beginOperation(operationName){
+    operationInProcess = true;
+    ongoingOperation = operationName;
 }
 
 /**
- * Make calculations
+ * Make calculations and resetOperands to allow for new operations
  */
-function compute(){
+function compute(clearOperands=false){
     let computedValue = null;
+    let operationToPerform = operationInProcess ? ongoingOperation : checkOperation(); 
     operandB = display.value;
-    let operationToPerform = checkOperation();
     computedValue = performOperation(operationToPerform);
     readyForInput = true;
     updateDisplay(computedValue, true);
-    resetOperands();
+    resetOperands(clearOperands);
+
     return computedValue;
 }
 
@@ -102,9 +116,17 @@ function performOperation(operationToPerform){
     return computedValue;
 }
 
-function resetOperands(){
-    operandA = null;
-    operandB = null;
+function resetOperands(resetOperation=false){
+    if(resetOperation){
+        operandA = null;
+        operandB = null;
+        operationInProcess = false;
+        ongoingOperation = '';
+    } else {
+        //si aún no se presionó el btn =, solo se actualiza el valor de operandA
+        operandA = display.value;
+        operandB = null;
+    }
 }
 
 /**
@@ -113,48 +135,23 @@ function resetOperands(){
  * @param {string} b sumB
  */
 function sum(a, b){
-    let computedValue = 0;
-    if(a == null && b == null){ 
-        setUpForOperation('sum');
-    } else{
-        // perform operation;
-        computedValue = Number(a) + Number(b);
-    };
+    let computedValue = Number(a) + Number(b);
     return computedValue;
 }
 
 function multiply(a, b){
-    let computedValue = 0;
-    if(a == null && b == null){ 
-        setUpForOperation('multiply');
-    } else {
-        //perform operation
-        computedValue = Number(a) * Number(b);
-    }
+    let computedValue = Number(a) * Number(b);
     return computedValue;
 }
 
 function subtract(a, b){
-    let computedValue = 0;
-    if(a == null && b == null){ 
-        setUpForOperation('subtract');
-    } else {
-        //perform operation
-        computedValue = Number(a) - Number(b);
-    }
+    let computedValue =  Number(a) - Number(b);
     return computedValue;
 }
 
 function divide(a,b){
-    let computedValue = 0;
-    if(a == null && b == null){ 
-        setUpForOperation('divide');
-    } else {
-        //perform operation
-        computedValue = Number(a) / Number(b);
-    }
+    let computedValue = Number(a) / Number(b);
     return computedValue;
-
 }
 
 
@@ -173,7 +170,26 @@ function takeInput(){
  * one operation at a time and disable the others
  */
 function setUpForOperation(operationName){
-    takeInput();
+    if (!operationInProcess){
+        beginOperation(operationName);
+        takeInput();
+        flagOngoingOperation(operationName);
+
+    } else if (operationInProcess  && ongoingOperation == operationName ){
+        compute();
+    } else {
+        // user is performing succesive operations, finish ongoing operation and begin new one
+        compute();
+        beginOperation(operationName);
+    }
+}
+
+/**
+ * Sets a flag on operations.operationName, to know what operation is to be 
+ * performed
+ * @param {string} operationName 
+ */
+function flagOngoingOperation(operationName){
     let keys = Object.keys(operations);
     keys.map((key, index)=>{
         operations[key] = (key == operationName) ;
