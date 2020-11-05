@@ -6,6 +6,7 @@ const addBtn = document.querySelector('#add');
 const multiplyBtn = document.querySelector('#multiply');
 const computeBtn = document.querySelector('#compute');
 const subtractBtn = document.querySelector('#subtract');
+const divideBtn = document.querySelector('#divide');
 
 
 //variables
@@ -18,6 +19,7 @@ let operations = {
     sum : false,
     multiply : false,
     subtract: false,
+    divide: false,
 }
 // consts
 
@@ -43,6 +45,7 @@ function addClickability(){
    addBtn.addEventListener('click', ()  => sum());
    multiplyBtn.addEventListener('click', ()  => multiply());
    subtractBtn.addEventListener('click', ()  => subtract());
+   divideBtn.addEventListener('click', ()  => divide());
    computeBtn.addEventListener('click', ()  => compute());
    clearBtn.addEventListener('click', ()  => clearDisplay());
 
@@ -54,10 +57,8 @@ function addClickability(){
 function compute(){
     let computedValue = null;
     operandB = display.value;
-
     let operationToPerform = checkOperation();
     computedValue = performOperation(operationToPerform);
-
     readyForInput = true;
     updateDisplay(computedValue, true);
     resetOperands();
@@ -94,6 +95,8 @@ function performOperation(operationToPerform){
         case 'subtract':
             computedValue = subtract(operandA, operandB);
             break;
+        case 'divide':
+            computedValue = divide(operandA, operandB);
     } 
 
     return computedValue;
@@ -112,7 +115,7 @@ function resetOperands(){
 function sum(a, b){
     let computedValue = 0;
     if(a == null && b == null){ 
-        setUpForOperation('sum')
+        setUpForOperation('sum');
     } else{
         // perform operation;
         computedValue = Number(a) + Number(b);
@@ -123,7 +126,7 @@ function sum(a, b){
 function multiply(a, b){
     let computedValue = 0;
     if(a == null && b == null){ 
-        setUpForOperation('multiply')
+        setUpForOperation('multiply');
     } else {
         //perform operation
         computedValue = Number(a) * Number(b);
@@ -134,10 +137,21 @@ function multiply(a, b){
 function subtract(a, b){
     let computedValue = 0;
     if(a == null && b == null){ 
-        setUpForOperation('subtract')
+        setUpForOperation('subtract');
     } else {
         //perform operation
         computedValue = Number(a) - Number(b);
+    }
+    return computedValue;
+}
+
+function divide(a,b){
+    let computedValue = 0;
+    if(a == null && b == null){ 
+        setUpForOperation('divide');
+    } else {
+        //perform operation
+        computedValue = Number(a) / Number(b);
     }
     return computedValue;
 
