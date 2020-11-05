@@ -116,7 +116,6 @@ function sum(a, b){
 function takeInput(){
     if (!!operandA){
         operandA += Number(display.value);
-        readyForInput = true;
         updateDisplay(operandA, true);
     } else {
         operandA = Number(display.value);
