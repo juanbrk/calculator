@@ -86,7 +86,7 @@ function performOperation(operationToPerform){
             computedValue = Number(operandA) * Number(operandB);
             break;
         case 'sum':
-            computedValue = Number(operandB) + Number(operandA);
+            computedValue = sum(operandA, operandB);
     } 
 
     return computedValue;
@@ -97,31 +97,46 @@ function resetOperands(){
     operandB = null;
 }
 
+/**
+ * Sets up calculator for sum || adds up two numbers
+ * @param {string} a sumA
+ * @param {string} b sumB
+ */
+function sum(a, b){
+    let computedValue = 0;
+    if(a == null && b == null){ 
+        setUpForOperation('sum')
+    } else{
+        // perform operation;
+        computedValue = Number(a) + Number(b);
+    };
+    return computedValue;
+}
 
-function sum(){
+function takeInput(){
     if (!!operandA){
         operandA += Number(display.value);
-        readyForInput = true;
         updateDisplay(operandA, true);
     } else {
         operandA = Number(display.value);
     }
-
     readyForInput = true;
-    setUpForOperation('sum');
 }
 
-function multiply(){
-    operandA = display.value;
-    readyForInput = true;
-    setUpForOperation('multiply');
+function multiply(a, b){
+    if(a == null && b == null){ 
+        setUpForOperation('multiply')
+    } else {
+        //perform operation
+    }
 }
 
 /**
- * Sets only one flag on and resets the others, in order to allow for only
- * one operation at a time
+ * Takes input and sets only one flag on and resets the others, in order to allow
+ * one operation at a time and disable the others
  */
 function setUpForOperation(operationName){
+    takeInput();
     let keys = Object.keys(operations);
     keys.map((key, index)=>{
         operations[key] = (key == operationName) ;
