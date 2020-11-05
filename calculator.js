@@ -3,15 +3,20 @@ const display = document.querySelector('#display');
 const numbers = Array.from(document.getElementsByClassName('numeric'));
 const clearBtn = document.querySelector('#clear');
 const addBtn = document.querySelector('#add');
+const multiplyBtn = document.querySelector('#multiply');
 const computeBtn = document.querySelector('#compute');
 
 
 //variables
-let zeroed = true; // when display awaits for input
+let readyForInput = true; // when display awaits for input
 let operandA = null;
 let operandB = null;
-let isSum = false; // to refactor into an object of operations
 
+
+let operations = {
+    sum : false,
+    multiply : false,
+}
 // consts
 
 // functions
@@ -19,7 +24,7 @@ let isSum = false; // to refactor into an object of operations
 //Initializes display 
 function clearDisplay(){
     display.value = 0;
-    zeroed = true;
+    readyForInput = true;
     resetOperands();
 }
 
@@ -35,6 +40,7 @@ function addClickability(){
    
    clearBtn.addEventListener('click', ()  => clearDisplay());
    addBtn.addEventListener('click', ()  => sum());
+   multiplyBtn.addEventListener('click', ()  => multiply());
    computeBtn.addEventListener('click', ()  => compute());
 
 }
@@ -45,12 +51,44 @@ function addClickability(){
 function compute(){
     let computedValue = null;
     operandB = display.value;
-    if (isSum){
-        computedValue = Number(operandB) + Number(operandA);
-    }
-    zeroed = true;
+
+    let operationToPerform = checkOperation();
+    computedValue = performOperation(operationToPerform);
+
+    readyForInput = true;
     updateDisplay(computedValue, true);
     resetOperands();
+    return computedValue;
+}
+
+/**
+ * When computing, checks what operation to perform in order to compute properly. 
+ */
+function checkOperation(){
+    let operation = Object.keys(operations).reduce((operation, op) =>{
+        if (operations[op]){
+            operation = op;
+        };
+        return operation;
+    }, '');
+
+    return operation;
+}
+
+/**
+ * Computes an operation 
+ */
+function performOperation(operationToPerform){
+    let computedValue = null;
+
+    switch(operationToPerform){
+        case 'multiply':
+            computedValue = Number(operandA) * Number(operandB);
+            break;
+        case 'sum':
+            computedValue = Number(operandB) + Number(operandA);
+    } 
+
     return computedValue;
 }
 
@@ -63,14 +101,31 @@ function resetOperands(){
 function sum(){
     if (!!operandA){
         operandA += Number(display.value);
-        zeroed = true;
+        readyForInput = true;
         updateDisplay(operandA, true);
     } else {
         operandA = Number(display.value);
     }
 
-    zeroed = true;
-    isSum = true;
+    readyForInput = true;
+    setUpForOperation('sum');
+}
+
+function multiply(){
+    operandA = display.value;
+    readyForInput = true;
+    setUpForOperation('multiply');
+}
+
+/**
+ * Sets only one flag on and resets the others, in order to allow for only
+ * one operation at a time
+ */
+function setUpForOperation(operationName){
+    let keys = Object.keys(operations);
+    keys.map((key, index)=>{
+        operations[key] = (key == operationName) ;
+    });
 }
 
 
@@ -79,15 +134,15 @@ function sum(){
  * @param {string} value of the clicked button to be displayed
  */
 function updateDisplay(value, resetDisplay = false){
-    if (zeroed){ // no input yet
+    if (readyForInput){ // no input yet
         display.value = value;
-        zeroed = false;
+        readyForInput = false;
     } else {
         let displayValue = display.value;
         display.value = displayValue + value;
     }
 
-    zeroed = resetDisplay; 
+    readyForInput = resetDisplay; 
 }
 // main
 clearDisplay();
