@@ -1,14 +1,7 @@
-h1{
-    text-align: center;
-    margin-top: 0.67em;
-    margin-bottom: 0.67em;
-  }
-  *{
-    margin: 0;
-    padding: 0;
-  }
+
   .container{
     margin: auto;
+    margin-top: 2.3em;
     width: 25%;
     padding: 10px;
     border: 1px solid #f2f2f2;
@@ -16,7 +9,7 @@ h1{
        -moz-box-shadow: 1px 1px 4px 0px rgba(176,176,176,1);
             box-shadow: 1px 1px 4px 0px rgba(176,176,176,1);
     background-color: #fff;
-    height: 450px;
+    height: 390px;
     background-color: #F8F8F8;
   }
   .header{
@@ -27,12 +20,13 @@ h1{
   }
   .result{
     font-size: 24px;
-    padding: 24px 5px;
+    padding: 16px 5px;
     font-weight: 700;
     text-align: right;
-    width: 96%;
+    width: 98%;
+    padding-right: .8rem;
     border: none;
-    background-color: #F8F8F8;
+    background-color: rgba(112,112,112,.23);
   }
   .first-row,
   .second-row,
