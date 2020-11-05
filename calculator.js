@@ -47,10 +47,15 @@ function compute(){
     if (isSum){
         computedValue = Number(operandB) + Number(operandA);
     }
-
     zeroed = true;
     updateDisplay(computedValue, true);
+    resetOperands();
     return computedValue;
+}
+
+function resetOperands(){
+    operandA = null;
+    operandB = null;
 }
 
 
