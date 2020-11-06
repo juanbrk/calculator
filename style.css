@@ -47,7 +47,22 @@
    float: left;
    width: 23.5%;
    margin: 0 2px;
-   /*border: 1px solid #000;*/
+  }
+
+
+  .global:active{
+    transform: scale(.95);
+    background-color: rgba(242, 242, 242, .2);
+  }
+
+  .green:active{
+    transform: scale(.95);
+    background-color: rgba( 129, 199, 132,.8);
+  }
+
+  .red:active{
+    transform: scale(.95);
+    background-color: rgba(245, 2, 88, .6);
   }
   .conflict .left,
   .conflict .right{
