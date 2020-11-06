@@ -154,7 +154,13 @@ function subtract(a, b){
 }
 
 function divide(a,b){
-    let computedValue = Number(a) / Number(b);
+    let computedValue = 0;
+    if(b != 0){
+        computedValue = Number(a) / Number(b);
+    } else {
+        alert('Are you trying to divide by 0?');
+        resetOperands();
+    }
     return computedValue;
 }
 
