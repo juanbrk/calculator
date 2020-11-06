@@ -69,12 +69,16 @@ function beginOperation(operationName){
  */
 function compute(clearOperands=false){
     let computedValue = null;
-    let operationToPerform = operationInProcess ? ongoingOperation : checkOperation(); 
-    operandB = display.value;
-    computedValue = performOperation(operationToPerform);
-    readyForInput = true;
-    updateDisplay(computedValue, true);
-    resetOperands(clearOperands);
+    if (!!operandA){ // 
+        let operationToPerform = operationInProcess ? ongoingOperation : checkOperation(); 
+        operandB = display.value;
+        computedValue = performOperation(operationToPerform);
+        readyForInput = true;
+        updateDisplay(computedValue, true);
+        resetOperands(clearOperands);        
+    } else { // no input received
+        computedValue = 0;
+    }
 
     return computedValue;
 }
